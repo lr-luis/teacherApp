@@ -10,13 +10,12 @@ function App() {
 
   // setProfile(null)
 
-  const login = useGoogleLogin({
+  const getGoogleProfile  =  useGoogleLogin({
     onSuccess: (tokenResponse) => setUser(tokenResponse),
     onError: (error) => console.log('Login Failed:', error)
   })
 
   const errorInLogin = (error) => {
-    console.log('onErrorLogin :: ', error)
   }
 
   useEffect(
@@ -29,7 +28,18 @@ function App() {
           }
         })
           .then((res) => {
-            setProfile(res.data)
+            axios
+              .post(`http://localhost:4000/api/signUp`, {
+                ...res.data
+              })
+              .then((response) => {
+                console.log('user login successfully')
+                setProfile(res.data)
+              })
+              .catch((err) => {
+                console.log('user registry with error', err)
+              })
+        
           })
           .catch((err) => {
             console.error(err)
@@ -45,7 +55,6 @@ function App() {
   }
 
   return (
-    // <button onClick={() => login()} onError={() => errorInLogin()}>Sign in with Google 🚀</button>
     <div>
       <h2>React Google Login</h2>
       <br />
@@ -61,7 +70,7 @@ function App() {
           <button onClick={logout}>Log out</button>
         </div>
       ) : (
-        <button onClick={login}>Sign in with Google 🚀 </button>
+        <button onClick={getGoogleProfile}>Sign in with Google 🚀 </button>
       )}
     </div>
   )
