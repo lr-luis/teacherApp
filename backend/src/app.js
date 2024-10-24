@@ -8,8 +8,8 @@ const app = express()
 
 app.use(
   cors({
-    origin: 'https://localhost:5173/',
-    credential: true
+    origin: 'https://localhost:5173',
+    credentials: true
   })
 )
 
