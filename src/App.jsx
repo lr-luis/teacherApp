@@ -1,78 +1,35 @@
-import { googleLogout, useGoogleLogin } from '@react-oauth/google'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+// import Navbar from './components/Navbar'
 import './App.css'
+import { AuthProvider } from './context/AuthContext'
+import Home from './pages/Home/Home'
+import Login from './pages/Login/Login'
+import SignUp from './pages/SignUp/SignUp'
+import ProtectedRoute from './ProtectedRoute'
 
 function App() {
-  // const [count, setCount] = useState(0)
-  const [user, setUser] = useState([])
-  const [profile, setProfile] = useState([])
-
-  // setProfile(null)
-
-  const getGoogleProfile  =  useGoogleLogin({
-    onSuccess: (tokenResponse) => setUser(tokenResponse),
-    onError: (error) => console.log('Login Failed:', error)
-  })
-
-  const errorInLogin = (error) => {
-  }
-
-  useEffect(
-    () => {
-      if (user) {
-        axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: 'application/json'
-          }
-        })
-          .then((res) => {
-            axios
-              .post(`http://localhost:4000/api/signUp`, {
-                ...res.data
-              })
-              .then((response) => {
-                console.log('user login successfully')
-                setProfile(res.data)
-              })
-              .catch((err) => {
-                console.log('user registry with error', err)
-              })
-        
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-      }
-    }
-  )
-
-  const logout = () => {
-    googleLogout()
-    setProfile(null)
-    setUser(null)
-  }
-
   return (
-    <div>
-      <h2>React Google Login</h2>
-      <br />
-      <br />
-      {profile ? (
-        <div>
-          <img src={profile.picture} alt="user image" />
-          <h3>User Logged in</h3>
-          <p>Name: {profile.name}</p>
-          <p>Email Address: {profile.email}</p>
-          <br />
-          <br />
-          <button onClick={logout}>Log out</button>
-        </div>
-      ) : (
-        <button onClick={getGoogleProfile}>Sign in with Google 🚀 </button>
-      )}
-    </div>
+    <AuthProvider>
+      {/* <TaskProvider> */}
+        <BrowserRouter>
+          <main className="container mx-auto px-10">
+            {/* <Navbar></Navbar> */}
+            <Routes>
+              {/* <Route path="/" element={<HomePage />} /> */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<SignUp />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/home" element={<Home />} />
+                {/* <Route path="/addTask" element={<TaskFormPage />} />
+                <Route path="/task/:id" element={<TaskFormPage />} />
+                <Route path="/profile" element={<ProfilePage />} /> */}
+              </Route>
+            </Routes>
+          </main>
+        </BrowserRouter>
+      {/* </TaskProvider> */}
+    </AuthProvider>
   )
 }
+
 export default App
