@@ -48,14 +48,13 @@ const db = new Firestore({
 
 export const getUsers = async () => {
   const snapshot = await db.collection('users').get();
-
   snapshot.forEach(doc => {
     console.log(doc.id)
   });
 }
 
 export const userExist = async (user = 'test') => {
-  console.log('onuserExist::', user)
+  console.log('onUserExist::', user)
   const userExist = await (await db.doc(`users/${user}`).get()).exists
   return userExist
 }

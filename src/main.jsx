@@ -5,9 +5,9 @@ import App from './App.jsx';
 import './index.css';
 
 createRoot(document.getElementById('root')).render(
-    <GoogleOAuthProvider clientId="">
-      <StrictMode>
-        <App />
-      </StrictMode>
-    </GoogleOAuthProvider>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_YOKEN}>
+    <StrictMode>
+      <App />
+    </StrictMode>
+  </GoogleOAuthProvider>
 )
