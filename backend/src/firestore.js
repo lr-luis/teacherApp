@@ -3,8 +3,9 @@ import { Storage } from '@google-cloud/storage';
 
 
 export const connectDB = async () => {
+  const fileName = 'src/keys/teacherapp-serviceCode.json'
   const storage = new Storage({
-    keyFilename: 'src/teacherapp-serviceCode.json'
+    keyFilename: fileName
   })
   const proyect = await storage.getProjectId()
   console.log('proyect::', proyect)
